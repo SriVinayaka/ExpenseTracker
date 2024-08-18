@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 import { getDataFromServer } from "../services/menu";
-import ExpenseTracker from "./ExpenseTracker";
+import {ExpenseTracker} from "./ExpenseTracker";
 
-function ShowData() {
+export function ShowData() {
   const [items, setItems] = useState([]);
   const [error, setError] = useState(null);
-  const [sum, setSum] = useState();
+  const [sum, setSum] = useState(0);
   const [rahulspent, setRahulspent] = useState(0);
   const [rameshspent, setRameshspent] = useState(0);
   const [showform, setShowForm] = useState(false);
@@ -18,7 +18,10 @@ function ShowData() {
       try {
         const data = await getDataFromServer();
         setItems(data);
-        setSum(data.reduce((result, v) => (result = result + v.price), 0));
+        //setSum(data.reduce((result, v) => (result = Number(result).toFixed(2) + Number(v.price).toFixed(2)),0
+        setSum(data.reduce((result, v) => (result + Number(v.price)), 0).toFixed(2), 0);
+        //0
+        //));
         Shares(data);
       } catch (error) {
         setError(error);
@@ -27,16 +30,40 @@ function ShowData() {
     fetchMenu();
   }, [showform]);
 
+
   const Shares = (data) => {
-    data.map((sams) =>
-      sams.payeeName === "Rahul"
-        ? (rahulspent1 = rahulspent1 + sams.price)
-        : (rameshspent1 = rameshspent1 + sams.price)
-    );
+    data.map((sams) => {
+      if(sams.payeeName === "Rahul")
+      {
+        (rahulspent1 = Number(rahulspent1).toFixed(2) + Number(sams.price).toFixed(2))
+      }
+      else{
+
+       (rameshspent1 = Number(rameshspent1).toFixed(2) + Number(sams.price).toFixed(2))
+      }
+    //
+  });
     setRahulspent(rahulspent1);
     setRameshspent(rameshspent1);
-  };
+  //};
 
+
+/*
+const Shares = (data) => {
+  let rameshTotal = 0;
+  let rahulTotal = 0;
+
+  data.forEach((item) => {
+    if (item.payeeName === "Rahul") {
+      rahulTotal += item.price; // Add price directly to number variable
+    } else {
+      rameshTotal += item.price;
+    }
+  });
+*/
+  //setRahulspent(rahulTotal.toFixed(2)); // Update state with final value after loop
+  //setRameshspent(rameshTotal.toFixed(2));
+};
   const success = () => {
     setShowForm(false);
   };
@@ -76,20 +103,20 @@ function ShowData() {
         ))}
       <hr />
       <div className="use-inline ">Total: </div>
-      <span className="use-inline total">{sum}</span> <br />
+      <span className="use-inline total">{Number(sum).toFixed(2)}</span> <br />
       <div className="use-inline ">Rahul paid: </div>
-      <span className="use-inline total Rahul">{rahulspent}</span> <br />
+      <span className="use-inline total Rahul">{rahulspent1.toFixed(2)}</span> <br />
       <div className="use-inline ">Ramesh paid: </div>
-      <span className="use-inline total Ramesh">{rameshspent.toFixed(2)}</span> <br />
+      <span className="use-inline total Ramesh">{rameshspent1.toFixed(2)}</span> <br />
       <span className="use-inline payable">
-        {rahulspent > rameshspent ? "Pay Rahul " : "Pay Ramesh"}
+        {rahulspent1 > rameshspent1 ? "Pay Rahul " : "Pay Ramesh"}
       </span>
       <span className="use-inline payable price">
-        {" "}
-        {Math.abs((rahulspent - rameshspent) / 2)}
+        {}
+        {Math.abs((rahulspent1 - rameshspent1) / 2)}
       </span>
       {error && <>{error?.message}</>}
     </>
   );
 }
-export default ShowData;
+export default {ShowData};

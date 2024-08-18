@@ -3,7 +3,7 @@ import { pushDataToServer } from "../services/menu";
 
 
 
-function ExpenseTracker(props) {
+export function ExpenseTracker(props) {
 
     const [payeeName, setPayeeName] = useState("")
     const [product, setProduct] = useState("")
@@ -17,7 +17,7 @@ function ExpenseTracker(props) {
         setProduct(event.target.value);
     }
     const handlePriceChange = (event) => {
-        setPrice(event.target.value);
+        setPrice(Number(event.target.value));
     }
     const handleBillDateChange = (event) => {
         setBillDate(event.target.value);
@@ -78,5 +78,6 @@ function ExpenseTracker(props) {
 
         </section>
     )
-}
-export default ExpenseTracker;
+};
+
+export default {ExpenseTracker};

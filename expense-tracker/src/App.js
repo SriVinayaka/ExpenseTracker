@@ -1,7 +1,7 @@
 import logo from './logo.svg';
 import './App.css';
-import ShowData from './components/ShowData';
-import ExpenseTracker from './components/ExpenseTracker';
+import {ShowData} from './components/ShowData.js';
+import {ExpenseTracker} from './components/ExpenseTracker';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 function App() {
